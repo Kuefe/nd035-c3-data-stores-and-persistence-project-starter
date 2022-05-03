@@ -15,8 +15,10 @@ public class Employee {
     @Nationalized
     private String name;
 
+    @ElementCollection
     private Set<EmployeeSkill> skills;
 
+    @ElementCollection
     private Set<DayOfWeek> daysAvailable;
 
     public Long getId() {

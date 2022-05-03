@@ -33,5 +33,7 @@ public class Schedule {
 
 
     private LocalDate date;
+
+    @ElementCollection
     private Set<EmployeeSkill> activities;
 }
