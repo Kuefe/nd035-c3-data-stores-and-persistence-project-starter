@@ -9,11 +9,5 @@ import java.util.List;
 @Repository
 @Transactional
 public interface PetRepository extends JpaRepository<Pet, Long> {
-
-    // savePet: save or saveAll
-    // getPet: findAllById
-    // getPets: findAll
-
-    // getPetsByOwner
     List<Pet> findAllByCustomerId(Long customerId);
 }
