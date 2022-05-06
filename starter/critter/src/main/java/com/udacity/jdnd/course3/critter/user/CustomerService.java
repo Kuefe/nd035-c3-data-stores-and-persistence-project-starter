@@ -1,5 +1,6 @@
 package com.udacity.jdnd.course3.critter.user;
 
+import com.udacity.jdnd.course3.critter.pet.Pet;
 import com.udacity.jdnd.course3.critter.pet.PetNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,17 @@ public class CustomerService {
             customer = customers.get(0);
         else
             throw new CustomerNotFoundException("Customer not found");
+        return customer;
+    }
+
+    public Customer getCustomerById(Long customerId) {
+        Customer customer;
+        Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
+        if (optionalCustomer.isPresent())
+            customer = optionalCustomer.get();
+        else
+            throw new CustomerNotFoundException("Customer not found");
+
         return customer;
     }
 }

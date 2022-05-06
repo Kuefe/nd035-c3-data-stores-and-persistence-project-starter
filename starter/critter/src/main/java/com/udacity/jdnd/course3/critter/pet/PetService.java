@@ -15,7 +15,7 @@ public class PetService {
          return petRepository.save(pet);
     }
 
-    public Pet getPat(Long id) {
+    public Pet getPet(Long id) {
         Pet pet;
         Optional<Pet> optionalPet = petRepository.findById(id);
         if (optionalPet.isPresent())
@@ -30,13 +30,7 @@ public class PetService {
         return petRepository.findAll();
     }
 
-    public Pet getPetsByOwner(Long ownerId) {
-        Pet pet;
-        List<Pet> pets = petRepository.findAllByCustomerId(ownerId);
-        if (pets.size() > 0)
-            pet = pets.get(0);
-        else
-            throw new PetNotFoundException("Pet not found");
-        return pet;
+    public List<Pet> getPetsByOwner(Long ownerId) {
+        return petRepository.findAllByCustomerId(ownerId);
     }
 }
