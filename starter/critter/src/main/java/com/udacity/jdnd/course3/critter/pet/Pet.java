@@ -18,6 +18,7 @@ public class Pet {
     @JoinColumn(name = "customer_id")  //map the join column in the customer table
     private Customer customer;
 
+    @Enumerated(EnumType.STRING)
     private PetType type;
     @Nationalized
     private String name;
