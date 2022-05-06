@@ -42,7 +42,7 @@ public class UserController {
         List<CustomerDTO> customersDTO = new ArrayList<>();
 
         List<Customer> customers = customerService.getAllCustomers();
-        for (Customer customer: customers) {
+        for (Customer customer : customers) {
             customersDTO.add(convertCustomerToCustomerDTO(customer));
         }
 
@@ -79,7 +79,7 @@ public class UserController {
 
         Set<Employee> employees = employeeService.findEmployeesForService(dayOfWeek, skills);
 
-        for (Employee employee: employees) {
+        for (Employee employee : employees) {
             employeesDTO.add(convertEmployeeToEmployeeDTO(employee));
         }
 
@@ -92,8 +92,10 @@ public class UserController {
 
         List<Long> petIds = new ArrayList<>();
         List<Pet> pets = customer.getPets();
-        for (Pet pet : pets) {
-            petIds.add(pet.getId());
+        if (pets != null) {
+            for (Pet pet : pets) {
+                petIds.add(pet.getId());
+            }
         }
         customerDTO.setPetIds(petIds);
 
@@ -106,8 +108,10 @@ public class UserController {
 
         List<Pet> pets = new ArrayList<>();
         List<Long> petIds = customerDTO.getPetIds();
-        for (Long petId : petIds) {
-            pets.add(petService.getPet(petId));
+        if (petIds != null) {
+            for (Long petId : petIds) {
+                pets.add(petService.getPet(petId));
+            }
         }
         customer.setPets(pets);
 
