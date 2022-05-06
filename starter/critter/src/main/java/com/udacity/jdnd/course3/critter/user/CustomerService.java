@@ -21,14 +21,8 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
-    public Customer getOwnerByPet(Long petId) {
-        Customer customer;
-        List<Customer> customers = customerRepository.findAllCustomerByPetsId(petId);
-        if (customers.size()>1)
-            customer = customers.get(0);
-        else
-            throw new CustomerNotFoundException("Customer not found");
-        return customer;
+    public Customer getOwnerByPet(Pet pet) {
+        return customerRepository.findAllCustomerByPets(pet);
     }
 
     public Customer getCustomerById(Long customerId) {
