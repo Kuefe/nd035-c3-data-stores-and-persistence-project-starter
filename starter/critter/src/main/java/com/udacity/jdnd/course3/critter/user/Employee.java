@@ -16,6 +16,7 @@ public class Employee {
     private String name;
 
     @ElementCollection
+    @Enumerated(EnumType.STRING)
     private Set<EmployeeSkill> skills;
 
     @ElementCollection
