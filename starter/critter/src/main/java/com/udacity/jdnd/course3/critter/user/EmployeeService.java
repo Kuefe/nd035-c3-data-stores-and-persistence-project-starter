@@ -33,11 +33,14 @@ public class EmployeeService {
     }
 
     public Set<Employee> findEmployeesForService(DayOfWeek dayOfWeek, Set<EmployeeSkill> skills) {
-        Set<Employee> employees = new HashSet<>();
+        Set<Employee> employeeSet = employeeRepository.findEmployeeByDaysAvailableAndSkillsIn(dayOfWeek, skills);
 
-        for (EmployeeSkill skill : skills) {
-            employees.addAll(employeeRepository.findEmployeeByDaysAvailableAndSkills(dayOfWeek, skill));
+        // Check if the employee meets all skills
+        Set<Employee> newEmployeeSet = new HashSet<>();
+        for (Employee employee: employeeSet) {
+            if (employee.getSkills().containsAll(skills)) newEmployeeSet.add(employee);
         }
-        return employees;
+
+        return newEmployeeSet;
     }
 }
