@@ -34,7 +34,7 @@ import java.util.stream.IntStream;
 @Transactional
 @SpringBootTest(classes = CritterApplication.class)
 @ActiveProfiles("test")
-@TestPropertySource("classpath:/application-test.properties")
+//@TestPropertySource("classpath:/application-test.properties")
 public class CritterFunctionalTest {
 
     @Autowired
