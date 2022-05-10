@@ -2,8 +2,6 @@ package com.udacity.jdnd.course3.critter.user;
 
 import com.udacity.jdnd.course3.critter.pet.Pet;
 import com.udacity.jdnd.course3.critter.pet.PetService;
-import com.udacity.jdnd.course3.critter.schedule.Schedule;
-import com.udacity.jdnd.course3.critter.schedule.ScheduleDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +10,7 @@ import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Handles web requests related to Users.
@@ -39,14 +38,10 @@ public class UserController {
 
     @GetMapping("/customer")
     public List<CustomerDTO> getAllCustomers() {
-        List<CustomerDTO> customersDTO = new ArrayList<>();
-
         List<Customer> customers = customerService.getAllCustomers();
-        for (Customer customer : customers) {
-            customersDTO.add(convertCustomerToCustomerDTO(customer));
-        }
-
-        return customersDTO;
+        return customers.stream()
+                .map(c->convertCustomerToCustomerDTO(c))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/customer/pet/{petId}")
@@ -73,18 +68,14 @@ public class UserController {
 
     @GetMapping("/employee/availability")
     public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
-        List<EmployeeDTO> employeesDTO = new ArrayList<>();
-
         DayOfWeek dayOfWeek = employeeDTO.getDate().getDayOfWeek();
         Set<EmployeeSkill> skills = employeeDTO.getSkills();
 
         Set<Employee> employees = employeeService.findEmployeesForService(dayOfWeek, skills);
 
-        for (Employee employee : employees) {
-            employeesDTO.add(convertEmployeeToEmployeeDTO(employee));
-        }
-
-        return employeesDTO;
+        return employees.stream()
+                .map(e->convertEmployeeToEmployeeDTO(e))
+                .collect(Collectors.toList());
     }
 
     private CustomerDTO convertCustomerToCustomerDTO(Customer customer) {
@@ -94,9 +85,8 @@ public class UserController {
         List<Long> petIds = new ArrayList<>();
         List<Pet> pets = customer.getPets();
         if (pets != null) {
-            for (Pet pet : pets) {
-                petIds.add(pet.getId());
-            }
+            petIds = pets.stream()
+                    .map(p->p.getId()).collect(Collectors.toList());
         }
         customerDTO.setPetIds(petIds);
 
@@ -110,9 +100,9 @@ public class UserController {
         List<Pet> pets = new ArrayList<>();
         List<Long> petIds = customerDTO.getPetIds();
         if (petIds != null) {
-            for (Long petId : petIds) {
-                pets.add(petService.getPet(petId));
-            }
+            pets=petIds.stream()
+                    .map(p->petService.getPet(p))
+                    .collect(Collectors.toList());
         }
         customer.setPets(pets);
 

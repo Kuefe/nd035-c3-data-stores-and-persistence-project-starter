@@ -17,9 +17,11 @@ public class Customer {
     private List<Pet> pets;
 
     @Nationalized
+    @Column(length = 50)
     private String name;
 
     @Nationalized
+    @Column(length = 30)
     private String phoneNumber;
 
     @Nationalized

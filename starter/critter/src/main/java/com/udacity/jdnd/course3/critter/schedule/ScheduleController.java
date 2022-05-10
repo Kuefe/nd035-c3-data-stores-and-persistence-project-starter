@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Handles web requests related to Schedules.
@@ -38,10 +39,9 @@ public class ScheduleController {
     public List<ScheduleDTO> getAllSchedules() {
         List<ScheduleDTO> schedulesDTO = new ArrayList<>();
         List<Schedule> schedules = scheduleService.getAllSchedules();
-        for (Schedule schedule : schedules) {
-            schedulesDTO.add(convertScheduleToScheduleDTO(schedule));
-        }
-        return schedulesDTO;
+        return schedules.stream()
+                .map(p -> convertScheduleToScheduleDTO(p))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/pet/{petId}")
@@ -49,11 +49,9 @@ public class ScheduleController {
         List<ScheduleDTO> schedulesDTO = new ArrayList<>();
 
         List<Schedule> schedules = scheduleService.getScheduleForPet(petId);
-        for (Schedule schedule : schedules) {
-            schedulesDTO.add(convertScheduleToScheduleDTO(schedule));
-        }
-
-        return schedulesDTO;
+        return schedules.stream()
+                .map(p -> convertScheduleToScheduleDTO(p))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/employee/{employeeId}")
@@ -61,11 +59,9 @@ public class ScheduleController {
         List<ScheduleDTO> schedulesDTO = new ArrayList<>();
 
         List<Schedule> schedules = scheduleService.getScheduleForEmployee(employeeId);
-        for (Schedule schedule : schedules) {
-            schedulesDTO.add(convertScheduleToScheduleDTO(schedule));
-        }
-
-        return schedulesDTO;
+        return schedules.stream()
+                .map(p -> convertScheduleToScheduleDTO(p))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/customer/{customerId}")
@@ -73,29 +69,21 @@ public class ScheduleController {
         List<ScheduleDTO> schedulesDTO = new ArrayList<>();
 
         List<Schedule> schedules = scheduleService.getScheduleForCustomer(customerId);
-        for (Schedule schedule : schedules) {
-            schedulesDTO.add(convertScheduleToScheduleDTO(schedule));
-        }
-
-        return schedulesDTO;
+        return schedules.stream()
+                .map(p -> convertScheduleToScheduleDTO(p))
+                .collect(Collectors.toList());
     }
 
     private ScheduleDTO convertScheduleToScheduleDTO(Schedule schedule) {
         ScheduleDTO scheduleDTO = new ScheduleDTO();
         BeanUtils.copyProperties(schedule, scheduleDTO, new String[]{"employees", "pets"});
 
-        List<Long> employeeIds = new ArrayList<>();
         List<Employee> employees = schedule.getEmployees();
-        for (Employee employee : employees) {
-            employeeIds.add(employee.getId());
-        }
+        List<Long> employeeIds = employees.stream().map(e -> e.getId()).collect(Collectors.toList());
         scheduleDTO.setEmployeeIds(employeeIds);
 
-        List<Long> petIds = new ArrayList<>();
         List<Pet> pets = schedule.getPets();
-        for (Pet pet : pets) {
-            petIds.add(pet.getId());
-        }
+        List<Long> petIds = pets.stream().map(p -> p.getId()).collect(Collectors.toList());
         scheduleDTO.setPetIds(petIds);
 
         return scheduleDTO;
@@ -105,18 +93,15 @@ public class ScheduleController {
         Schedule schedule = new Schedule();
         BeanUtils.copyProperties(scheduleDTO, schedule, new String[]{"employeeIds", "petIds"});
 
-        List<Employee> employees = new ArrayList<>();
         List<Long> employeeIds = scheduleDTO.getEmployeeIds();
-        for (Long employeeId : employeeIds) {
-            employees.add(employeeService.getEmployee(employeeId));
-        }
+        List<Employee> employees = employeeIds.stream()
+                .map(e->employeeService.getEmployee(e)).collect(Collectors.toList());
         schedule.setEmployees(employees);
 
-        List<Pet> pets = new ArrayList<>();
         List<Long> petIds = scheduleDTO.getPetIds();
-        for (Long petId : petIds) {
-            pets.add(petService.getPet(petId));
-        }
+        List<Pet> pets = petIds.stream()
+                .map(p->petService.getPet(p))
+                .collect(Collectors.toList());
         schedule.setPets(pets);
 
         return schedule;

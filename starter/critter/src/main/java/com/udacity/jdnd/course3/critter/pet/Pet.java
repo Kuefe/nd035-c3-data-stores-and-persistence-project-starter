@@ -21,6 +21,7 @@ public class Pet {
     @Enumerated(EnumType.STRING)
     private PetType type;
     @Nationalized
+    @Column(length = 30)
     private String name;
     private LocalDate birthDate;
     @Nationalized

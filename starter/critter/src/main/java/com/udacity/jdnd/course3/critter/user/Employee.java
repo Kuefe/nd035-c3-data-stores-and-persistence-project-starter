@@ -13,6 +13,7 @@ public class Employee {
     Long id;
 
     @Nationalized
+    @Column(length = 50)
     private String name;
 
     @ElementCollection
